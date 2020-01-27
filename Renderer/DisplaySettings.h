@@ -6,8 +6,9 @@
 
 namespace NAE
 {
-	struct DisplaySettings
+	class DisplaySettings
 	{
+	public:
 		typedef LRESULT(CALLBACK *MessagePumpCallback)(HWND, UINT, WPARAM, LPARAM);
 
 		DisplaySettings();

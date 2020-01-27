@@ -6,6 +6,7 @@
 #include <assert.h>
 #include <iostream>
 #include <set>
+#include <unordered_map>
 #include <cstdint>
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
@@ -14,6 +15,8 @@
 #include <chrono>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#define TINYOBJLOADER_IMPLEMENTATION
+#include <tiny_obj_loader.h>
 using namespace NAE;
 using namespace glm;
 
@@ -212,6 +215,7 @@ void Renderer::Init(const DisplaySettings& displaySettings)
 	CreateTextureImage();
 	CreateTextureImageView();
 	CreateTextureSampler();
+	LoadModel();
 	CreateVertexBuffer();
 	CreateIndexBuffer();
 	CreateUniformBuffers();
@@ -754,7 +758,7 @@ void Renderer::CreateDepthResources()
 void Renderer::CreateTextureImage()
 {
 	int texWidth, texHeight, texChannels;
-	stbi_uc* pixels = stbi_load("textures/statue.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+	stbi_uc* pixels = stbi_load("textures/chalet.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
 	VkDeviceSize imageSize = texWidth * texHeight * 4;
 
 	assert(pixels);
@@ -836,9 +840,50 @@ void Renderer::CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemor
 	vkBindBufferMemory(mDevice, buffer, bufferMemory, 0);
 }
 
+void Renderer::LoadModel()
+{
+	tinyobj::attrib_t attrib;
+	std::vector<tinyobj::shape_t> shapes;
+	std::vector<tinyobj::material_t> materials;
+	std::string warn, err;
+
+	assert(tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, "Models/chalet.obj"));
+
+	std::unordered_map<Vertex, uint32_t> uniqueVertices = {};
+
+	for (const auto& shape : shapes)
+	{
+		for (const auto& index : shape.mesh.indices)
+		{
+			Vertex vertex = {};
+
+			vertex.position = {
+				attrib.vertices[3 * index.vertex_index + 0],
+				attrib.vertices[3 * index.vertex_index + 1],
+				attrib.vertices[3 * index.vertex_index + 2]
+			};
+
+			vertex.texCoord = {
+				attrib.texcoords[2 * index.texcoord_index + 0],
+				1.0f - attrib.texcoords[2 * index.texcoord_index + 1]
+			};
+
+			vertex.color = { 1.0f, 1.0f, 1.0f };
+
+			if (uniqueVertices.count(vertex) == 0)
+			{
+				uniqueVertices[vertex] = static_cast<uint32_t>(mVertices.size());
+				mVertices.push_back(vertex);
+			}
+
+			mIndices.push_back(uniqueVertices[vertex]);
+		}
+	}
+}
+
 void Renderer::CreateVertexBuffer()
 {
-	VkDeviceSize bufferSize = sizeof(mQuadVerts[0]) * mQuadVerts.size();
+	VkDeviceSize bufferSize = sizeof(mVertices[0]) * mVertices.size();
 
 	VkBuffer stagingBuffer;
 	VkDeviceMemory stagingBufferMemory;
@@ -846,7 +891,7 @@ void Renderer::CreateVertexBuffer()
 
 	void* data;
 	vkMapMemory(mDevice, stagingBufferMemory, 0, bufferSize, 0, &data);
-	memcpy(data, mQuadVerts.data(), (size_t)bufferSize);
+	memcpy(data, mVertices.data(), (size_t)bufferSize);
 	vkUnmapMemory(mDevice, stagingBufferMemory);
 
 	CreateBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, mVertexBuffer, mVertexBufferMemory);
@@ -858,7 +903,7 @@ void Renderer::CreateVertexBuffer()
 
 void Renderer::CreateIndexBuffer()
 {
-	VkDeviceSize bufferSize = sizeof(mQuadIndices[0]) * mQuadIndices.size();
+	VkDeviceSize bufferSize = sizeof(mIndices[0]) * mIndices.size();
 
 	VkBuffer stagingBuffer;
 	VkDeviceMemory stagingBufferMemory;
@@ -866,7 +911,7 @@ void Renderer::CreateIndexBuffer()
 
 	void* data;
 	vkMapMemory(mDevice, stagingBufferMemory, 0, bufferSize, 0, &data);
-	memcpy(data, mQuadIndices.data(), (size_t)bufferSize);
+	memcpy(data, mIndices.data(), (size_t)bufferSize);
 	vkUnmapMemory(mDevice, stagingBufferMemory);
 
 	CreateBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, mIndexBuffer, mIndexBufferMemory);
@@ -1046,10 +1091,10 @@ void Renderer::CreateCommandBuffers()
 		VkBuffer vertexBuffers[] = { mVertexBuffer };
 		VkDeviceSize offsets[] = { 0 };
 		vkCmdBindVertexBuffers(mCommandBuffers[i], 0, 1, vertexBuffers, offsets);
-		vkCmdBindIndexBuffer(mCommandBuffers[i], mIndexBuffer, 0, VK_INDEX_TYPE_UINT16);
+		vkCmdBindIndexBuffer(mCommandBuffers[i], mIndexBuffer, 0, VK_INDEX_TYPE_UINT32);
 		vkCmdBindDescriptorSets(mCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, mPipelineLayout, 0, 1, &mDescriptorSets[i], 0, nullptr);
 
-		vkCmdDrawIndexed(mCommandBuffers[i], static_cast<uint32_t>(mQuadIndices.size()), 1, 0, 0, 0);
+		vkCmdDrawIndexed(mCommandBuffers[i], static_cast<uint32_t>(mIndices.size()), 1, 0, 0, 0);
 
 		vkCmdEndRenderPass(mCommandBuffers[i]);
 
@@ -1550,4 +1595,8 @@ std::array<VkVertexInputAttributeDescription, 3> Renderer::Vertex::GetAttributeD
 	return attributeDescriptions;
 }
 
+bool Renderer::Vertex::operator==(const Vertex& other) const
+{
+	return position == other.position && color == other.color && texCoord == other.texCoord;
+}
 

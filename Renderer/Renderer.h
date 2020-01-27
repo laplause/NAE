@@ -6,6 +6,9 @@
 #include <vector>
 #include <array>
 #include <optional>
+
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/hash.hpp>
 #include <glm/glm.hpp>
 
 
@@ -14,7 +17,7 @@
 namespace NAE
 {
 	// Forward Declarations
-	class DsiplaySettings;
+	struct DsiplaySettings;
 
 	class Renderer
 	{
@@ -26,6 +29,18 @@ namespace NAE
 		void Draw();
 		void WaitForDevice();
 		void HandleWindowResize(uint32_t newWidth, uint32_t newHeight);
+
+		struct Vertex
+		{
+			glm::vec3 position;
+			glm::vec3 color;
+			glm::vec2 texCoord;
+
+			static VkVertexInputBindingDescription GetBindingDescription();
+			static std::array<VkVertexInputAttributeDescription, 3> GetAttributeDescriptions();
+
+			bool operator==(const Vertex& other) const;
+		};
 
 	private:
 		struct QueueFamilyIndices
@@ -44,16 +59,6 @@ namespace NAE
 			VkSurfaceCapabilitiesKHR capabilities;
 			std::vector<VkSurfaceFormatKHR> formats;
 			std::vector<VkPresentModeKHR> presentModes;
-		};
-
-		struct Vertex
-		{
-			glm::vec3 position;
-			glm::vec3 color;
-			glm::vec2 texCoord;
-
-			static VkVertexInputBindingDescription GetBindingDescription();
-			static std::array<VkVertexInputAttributeDescription, 3> GetAttributeDescriptions();
 		};
 
 		struct UniformBufferObject
@@ -82,6 +87,7 @@ namespace NAE
 		void CreateTextureImage();
 		void CreateTextureImageView();
 		void CreateTextureSampler();
+		void LoadModel();
 		void CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
 		void CreateIndexBuffer();
 		void CreateVertexBuffer();
@@ -117,22 +123,8 @@ namespace NAE
 		VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 		VkShaderModule CreateShaderModule(const std::vector<char>& code);
 
-		const std::vector<Vertex> mQuadVerts = {
-			{{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
-			{{0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
-			{{0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
-			{{-0.5f, 0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},
-
-			{{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
-			{{0.5f, -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
-			{{0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
-			{{-0.5f, 0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}}
-		};
-
-		const std::vector<uint16_t> mQuadIndices = {
-			0, 1, 2, 2, 3, 0,
-			4, 5, 6, 6, 7, 4
-		};
+		std::vector<Vertex> mVertices;
+		std::vector<uint32_t> mIndices;
 
 		Window mWindow;
 		VkInstance mInstance;
@@ -187,4 +179,14 @@ namespace NAE
 #endif
 	};
 }
+
+template<> struct std::hash<NAE::Renderer::Vertex>
+{
+	size_t operator()(NAE::Renderer::Vertex const& vertex) const
+	{
+		return ((std::hash<glm::vec3>()(vertex.position) ^
+			(std::hash<glm::vec3>()(vertex.color) << 1)) >> 1) ^
+			(std::hash<glm::vec2>()(vertex.texCoord) << 1);
+	}
+};
 #endif

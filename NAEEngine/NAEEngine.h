@@ -4,6 +4,7 @@
 #define FULLSCREEN 0
 
 #include "Renderer.h"
+#include "GameClock.h"
 
 namespace NAE
 {
@@ -27,6 +28,7 @@ namespace NAE
 		NAEEngine& operator=(NAEEngine&&) = delete;
 		
 		Renderer mRenderer;
+		GameClock mClock;
 	};
 }
 #endif

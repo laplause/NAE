@@ -46,6 +46,7 @@ void NAEEngine::Run()
 		}
 		else
 		{
+			mClock.UpdateTime();
 			mRenderer.Draw();
 		}
 	}

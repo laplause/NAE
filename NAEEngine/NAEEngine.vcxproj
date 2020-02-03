@@ -129,10 +129,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="FileIO.h" />
+    <ClInclude Include="GameClock.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="NAEEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FileIO.cpp" />
+    <ClCompile Include="GameClock.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="NAEEngine.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

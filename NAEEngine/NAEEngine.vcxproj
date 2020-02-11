@@ -128,12 +128,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="FileIO.h" />
     <ClInclude Include="GameClock.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="NAEEngine.h" />
+    <ClInclude Include="PerspectiveCamera.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="FileIO.cpp" />
     <ClCompile Include="GameClock.cpp" />
     <ClCompile Include="GameObject.cpp" />

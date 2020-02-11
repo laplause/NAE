@@ -3,31 +3,35 @@
 
 #include <glm/glm.hpp>
 
-class GameClock;
-
-class GameObject
+namespace NAE
 {
-public:
-	GameObject();
-	virtual ~GameObject();
 
-	inline void SetPosition(float x, float y, float z);
-	inline void SetPosition(glm::vec3& position);
-	inline void SetEnabled(bool enable);
-	inline void SetVisible(bool visible);
+	class GameClock;
 
-	inline const bool isEnabled() const;
-	inline const bool isVisible() const;
-	inline const glm::vec3& GetPosition() const;
+	class GameObject
+	{
+	public:
+		GameObject();
+		virtual ~GameObject();
 
-	virtual void Update(const GameClock& gameClock);
+		inline void SetPosition(float x, float y, float z);
+		inline void SetPosition(glm::vec3& position);
+		inline void SetEnabled(bool enable);
+		inline void SetVisible(bool visible);
 
-protected:
-	glm::vec3 mPosition;
-	float mVelocity;
+		inline const bool isEnabled() const;
+		inline const bool isVisible() const;
+		inline const glm::vec3& GetPosition() const;
 
-private:
-	bool mEnabled;
-	bool mVisible;
-};
+		virtual void Update(const GameClock& gameClock) = 0;
+
+	protected:
+		glm::vec3 mPosition;
+		float mVelocity;
+
+	private:
+		bool mEnabled;
+		bool mVisible;
+	};
+}
 #endif

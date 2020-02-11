@@ -1,4 +1,5 @@
 #include "GameObject.h"
+using namespace NAE;
 
 GameObject::GameObject() :
 	mPosition(0, 0, 0),

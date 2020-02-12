@@ -10,7 +10,7 @@ namespace NAE
 	{
 	public:
 		Camera();
-		~Camera();
+		virtual ~Camera();
 
 		inline const glm::mat4x4& ViewMatrix();
 		inline const glm::mat4x4& ProjectionMatrix();

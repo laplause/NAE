@@ -133,13 +133,21 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="VulkanDebugCube.h" />
     <ClInclude Include="DisplaySettings.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="VertexTypes.h" />
+    <ClInclude Include="VulkanModel.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DisplaySettings.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="VertexTypes.cpp" />
+    <ClCompile Include="VulkanDebugCube.cpp" />
+    <ClCompile Include="VulkanModel.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>

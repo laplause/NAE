@@ -12,14 +12,13 @@ namespace NAE
 		Camera();
 		virtual ~Camera();
 
-		inline const glm::mat4x4& ViewMatrix();
-		inline const glm::mat4x4& ProjectionMatrix();
-		inline const glm::mat4x4& ViewProjectionMatrix();
+		const glm::mat4x4& ViewMatrix() const;
+		inline const glm::mat4x4& ProjectionMatrix() const { return mProjectionMatrix; };
+		inline const glm::mat4x4& ViewProjectionMatrix() const { return mProjectionMatrix * ViewMatrix(); };
 
 		virtual void Update(const GameClock& gameClock) = 0;
 
 	protected:
-		glm::mat4x4 mViewMatrix;
 		glm::mat4x4 mProjectionMatrix;
 	};
 }

@@ -1,8 +1,11 @@
 #include "GameObject.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
 using namespace NAE;
 
 GameObject::GameObject() :
 	mPosition(0, 0, 0),
+	mRotation(0, 0, 0),
 	mVelocity(0),
 	mEnabled(false),
 	mVisible(true)
@@ -20,39 +23,10 @@ void GameObject::Update(const GameClock& gameClock)
 
 }
 
-void GameObject::SetPosition(float x, float y, float z)
+const glm::mat4x4& GameObject::GetTransform() const
 {
-	mPosition.x = x;
-	mPosition.y = y;
-	mPosition.z = z;
-}
+	glm::mat4 rotation = glm::yawPitchRoll(mRotation.z, mRotation.y, mRotation.x);
+	glm::mat4 translation = glm::translate(glm::mat4(1.0f), mPosition);
 
-void GameObject::SetPosition(glm::vec3& position)
-{
-	mPosition = position;
-}
-
-void GameObject::SetEnabled(bool enable)
-{
-	mEnabled = enable;
-}
-
-void GameObject::SetVisible(bool visible)
-{
-	mVisible = visible;
-}
-
-const bool GameObject::isEnabled() const
-{
-	return mEnabled;
-}
-
-const bool GameObject::isVisible() const
-{
-	return mVisible;
-}
-
-const glm::vec3& GameObject::GetPosition() const
-{
-	return mPosition;
+	return rotation * translation;
 }

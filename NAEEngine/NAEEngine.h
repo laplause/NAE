@@ -8,6 +8,8 @@
 
 namespace NAE
 {
+	class Camera;
+
 	class NAEEngine
 	{
 	public:
@@ -27,6 +29,7 @@ namespace NAE
 		NAEEngine& operator=(const NAEEngine&) = delete;
 		NAEEngine& operator=(NAEEngine&&) = delete;
 		
+		Camera* mMainCamera;
 		Renderer mRenderer;
 		GameClock mClock;
 	};

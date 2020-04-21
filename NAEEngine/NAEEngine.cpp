@@ -1,10 +1,13 @@
 #include "NAEEngine.h"
 #include "DisplaySettings.h"
+#include "PerspectiveCamera.h"
 #include <cassert>
 using namespace NAE;
 
 NAEEngine::NAEEngine() :
-	mRenderer()
+	mRenderer(),
+	mMainCamera(nullptr),
+	mClock()
 {
 
 }
@@ -22,6 +25,13 @@ void NAEEngine::Init(const std::string& appName)
 	ds.creator = this;
 
 	mRenderer.Init(ds);
+
+	// TODO: make sure this is created with the camera type and settings from the loaded game project
+	float aspectRatio = static_cast<float>(mRenderer.GetRenderWidth()) / static_cast<float>(mRenderer.GetRenderHeight());
+	mMainCamera = new PerspectiveCamera( 45.0f, aspectRatio, 1.0f, 100.0f);
+	mMainCamera->SetPosition(glm::vec3(0.0f, 0.0f, 5.0f));
+
+	mRenderer.SetCurrentCamera(mMainCamera);
 }
 
 void NAEEngine::Run()

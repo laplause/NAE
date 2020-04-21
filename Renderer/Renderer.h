@@ -2,6 +2,9 @@
 #define RENDERER_H
 
 #include "Window.h"
+#include "Camera.h"
+#include "VulkanDebugCube.h"
+
 #include <vulkan/vulkan.h>
 #include <vector>
 #include <array>
@@ -29,6 +32,18 @@ namespace NAE
 		void Draw();
 		void WaitForDevice();
 		void HandleWindowResize(uint32_t newWidth, uint32_t newHeight);
+
+		uint32_t GetRenderWidth();
+		uint32_t GetRenderHeight();
+
+		inline void SetCurrentCamera(Camera* camera) { mCurrentCamera = camera; };
+
+		static void CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+		static void CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
+		static VkCommandBuffer BeginSingleTimeCommands();
+		static void EndSingleTimeCommands(VkCommandBuffer commandBuffer);
+
+		static VkDevice Device() { return sDevice; };
 
 		struct Vertex
 		{
@@ -87,16 +102,10 @@ namespace NAE
 		void CreateTextureImage();
 		void CreateTextureImageView();
 		void CreateTextureSampler();
-		void LoadModel();
-		void CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
-		void CreateIndexBuffer();
-		void CreateVertexBuffer();
+		void LoadModels();
 		void CreateUniformBuffers();
 		void CreateDescriptorPool();
 		void CreateDescriptorSets();
-		VkCommandBuffer BeginSingleTimeCommands();
-		void EndSingleTimeCommands(VkCommandBuffer commandBuffer);
-		void CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 		void CreateCommandBuffers();
 		void CreateSyncObjects();
 		void TransitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
@@ -105,7 +114,6 @@ namespace NAE
 		void RecreateSwapChain();
 		void CleaUpSwapChain();
 
-		static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData);
 		void GetInstanceExtensions(unsigned int& enabledExtensionCount, const char** extensionNames);
 		bool CheckDeviceExtensionSupport(VkPhysicalDevice device);
 		bool CheckValidationLayerSupport();
@@ -116,21 +124,28 @@ namespace NAE
 		void DestroyDebugMessenger();
 		bool IsDeviceSuitable(VkPhysicalDevice device);
 		QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
-		uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
 		SwapChainSupportDetails QuerySwapChainSupport(VkPhysicalDevice device);
 		VkSurfaceFormatKHR ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
 		VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
 		VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 		VkShaderModule CreateShaderModule(const std::vector<char>& code);
 
-		std::vector<Vertex> mVertices;
-		std::vector<uint32_t> mIndices;
+		static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData);
+		static uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
+
+		static VkDevice sDevice;
+		static VkPhysicalDevice sPhysicalDevice;
+		static VkCommandPool sCommandPool;
+		static VkQueue sGraphicsQueue;
+
+		uint32_t mRenderWidth;
+		uint32_t mRenderHeight;
 
 		Window mWindow;
+		Camera* mCurrentCamera;
+		VulkanDebugCube mDebugCube;
+
 		VkInstance mInstance;
-		VkPhysicalDevice mPhysicalDevice;
-		VkDevice mDevice;
-		VkQueue mGraphicsQueue;
 		VkQueue mPresentQueue;
 		VkSurfaceKHR mSurface;
 		VkSwapchainKHR mSwapChain;
@@ -143,12 +158,7 @@ namespace NAE
 		VkDescriptorSetLayout mDescriptorSetLayout;
 		VkPipelineLayout mPipelineLayout;
 		VkPipeline mGraphicsPipeline;
-		VkCommandPool mCommandPool;
 		VkDescriptorPool mDescriptorPool;
-		VkBuffer mVertexBuffer;
-		VkDeviceMemory mVertexBufferMemory;
-		VkBuffer mIndexBuffer;
-		VkDeviceMemory mIndexBufferMemory;
 		VkImage mTextureImage;
 		VkDeviceMemory mTextureImageMemory;
 		VkImageView mTextureImageView;

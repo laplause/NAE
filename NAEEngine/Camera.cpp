@@ -3,6 +3,8 @@
 #include <glm/gtx/euler_angles.hpp>
 using namespace NAE;
 
+TYPE_DEFINITIONS(Camera);
+
 Camera::Camera() :
 	GameObject(),
 	mProjectionMatrix()

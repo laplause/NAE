@@ -14,12 +14,14 @@ namespace NAE
 		DisplaySettings();
 		~DisplaySettings();
 
-		MessagePumpCallback mMessagePumpCallback;
 		void* creator;
 		uint32_t mRequestedWidth;
 		uint32_t mRequestedHeight;
 		bool mFullScreen;
 		bool mBorderless;
+
+		// Windows stuff
+		MessagePumpCallback mMessagePumpCallback;
 		LPCSTR mAppName;
 	};
 }

@@ -45,6 +45,9 @@ namespace NAE
 
 		static VkDevice Device() { return sDevice; };
 
+		inline HWND MainWindowHandle() { return mWindow.GetWindowHandle(); }
+		inline HINSTANCE MainWindowInstance() { return mWindow.GetWindowInstance(); }
+
 		struct Vertex
 		{
 			glm::vec3 position;

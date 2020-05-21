@@ -2,6 +2,7 @@
 #include "DisplaySettings.h"
 #include "FileIO.h"
 #include "PerspectiveCamera.h"
+#include "NAEEngine.h"
 
 #include <vulkan\vulkan_win32.h>
 #include <stdlib.h>
@@ -174,14 +175,13 @@ void Renderer::Draw()
 
 void Renderer::UpdateUniformBuffer(uint32_t currentImage)
 {
-	static auto startTime = std::chrono::high_resolution_clock::now();
-
-	auto currentTime = std::chrono::high_resolution_clock::now();
-	float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+	static auto angle = glm::radians(90.0f);
+	auto rotationalVelocity = 2.0f;
+	angle += rotationalVelocity * static_cast<float>(NAEEngine::DeltaTime());
 
 	UniformBufferObject ubo = {};
 
-	ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0));
+	ubo.model = glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 1.0f, 0));
 	ubo.view = mCurrentCamera->ViewMatrix();
 	ubo.proj = mCurrentCamera->ProjectionMatrix();
 

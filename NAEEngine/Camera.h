@@ -8,6 +8,7 @@ namespace NAE
 
 	class Camera : public GameObject
 	{
+		TYPE_DECLARATIONS(Camera, GameObject);
 	public:
 		Camera();
 		virtual ~Camera();

@@ -10,8 +10,9 @@
 
 namespace NAE
 {
-	class GameObject
+	class GameObject : public Type
 	{
+		TYPE_DECLARATIONS(GameObject, Type);
 	public:
 		GameObject();
 		virtual ~GameObject();
@@ -31,6 +32,7 @@ namespace NAE
 		inline const bool IsEnabled() const { return mEnabled; };
 		inline const bool IsVisible() const { return mVisible; };
 		inline const std::string& Name() { return mName; };
+		inline const uint32_t Id() { return mId; };
 
 		inline const glm::vec3& GetPosition() const { return mPosition; };
 		inline const glm::vec3& GetRotationAsEulerAngles() const { return mRotation; };
@@ -39,6 +41,8 @@ namespace NAE
 		virtual void Update(const GameClock& gameClock) = 0;
 
 	protected:
+		static uint32_t sNextGameObjectId;
+
 		glm::vec3 mPosition;
 		glm::vec3 mRotation;
 		float mVelocity;
@@ -46,6 +50,7 @@ namespace NAE
 	private:
 		bool mEnabled;
 		bool mVisible;
+		uint32_t mId;
 		std::string mName;
 	};
 }

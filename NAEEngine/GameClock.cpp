@@ -1,4 +1,7 @@
 #include "GameClock.h"
+using namespace NAE;
+
+TYPE_DEFINITIONS(GameClock);
 
 GameClock::GameClock() :
 	mTotalGameTime(0),
@@ -27,7 +30,7 @@ const double GameClock::DeltaTime() const
 	return mDeltaTime;
 }
 
-void GameClock::UpdateTime()
+void GameClock::Update()
 {
 	QueryPerformanceCounter(&mCurrentTime);
 	mTotalGameTime = (mCurrentTime.QuadPart - mStartTime.QuadPart) / mFrequency;

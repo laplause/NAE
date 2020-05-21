@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Windows">
+      <UniqueIdentifier>{223193f7-07bf-496c-99ea-fff7f5098d42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{c16e35d5-726f-4012-9ec6-8435a76a3b5c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="WindowsKeyboard.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsMouse.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsInputManager.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="InputComponent.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="InputDevice.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="InputDeviceInitializer.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Keyboard.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="InputMaps.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="WindowsInputManager.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowsKeyboard.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowsMouse.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="InputComponent.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="InputDevice.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Keyboard.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Mouse.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="InputMaps.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

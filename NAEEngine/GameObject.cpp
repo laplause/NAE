@@ -3,6 +3,10 @@
 #include <glm/gtx/euler_angles.hpp>
 using namespace NAE;
 
+TYPE_DEFINITIONS(GameObject);
+
+uint32_t GameObject::sNextGameObjectId = 0;
+
 GameObject::GameObject() :
 	mPosition(0, 0, 0),
 	mRotation(0, 0, 0),
@@ -10,7 +14,8 @@ GameObject::GameObject() :
 	mEnabled(false),
 	mVisible(true)
 {
-
+	assert(sNextGameObjectId < UINT32_MAX);
+	mId = sNextGameObjectId++;
 }
 
 GameObject::~GameObject()

@@ -1,37 +1,80 @@
 #include "NAEEngine.h"
+#include "Renderer.h"
+#include "WindowsInputManager.h"
 #include "DisplaySettings.h"
 #include "PerspectiveCamera.h"
 #include <cassert>
 using namespace NAE;
 
+TYPE_DEFINITIONS(NAEEngine);
+
+NAEEngine* NAEEngine::sInstance = nullptr;
+
 NAEEngine::NAEEngine() :
-	mRenderer(),
+	mRenderer(nullptr),
 	mMainCamera(nullptr),
-	mClock()
+	mClock(),
+	mSystems()
 {
 
 }
 
 NAEEngine::~NAEEngine()
 {
+	if (mMainCamera != nullptr)
+	{
+		delete mMainCamera;
+		mMainCamera = nullptr;
+	}
 
+	if (mInputManager != nullptr)
+	{
+		delete mInputManager;
+		mInputManager = nullptr;
+	}
+
+	if (mRenderer != nullptr)
+	{
+		delete mRenderer;
+		mRenderer = nullptr;
+	}
 }
 
-void NAEEngine::Init(const std::string& appName)
+void NAEEngine::Initialize(const std::string& appName)
 {
+	// Create the engine
+	NAEEngine::CreateInstance();
+
+	// Initialize the engine
 	DisplaySettings ds;
 	ds.mAppName = appName.c_str();
 	ds.mMessagePumpCallback = WndProc;
-	ds.creator = this;
+	ds.creator = sInstance;
 
-	mRenderer.Init(ds);
+	sInstance->Init(ds);
+}
+
+void NAEEngine::Init(DisplaySettings& ds)
+{
+	if (mRenderer == nullptr)
+	{
+		mRenderer = new Renderer();
+	}
+
+	mRenderer->Init(ds);
+
+	if (mInputManager == nullptr)
+	{
+		mInputManager = new WindowsInputManager();
+		mSystems[WindowsInputManager::TypeId()] = mInputManager;
+	}
 
 	// TODO: make sure this is created with the camera type and settings from the loaded game project
-	float aspectRatio = static_cast<float>(mRenderer.GetRenderWidth()) / static_cast<float>(mRenderer.GetRenderHeight());
-	mMainCamera = new PerspectiveCamera( 45.0f, aspectRatio, 1.0f, 100.0f);
+	float aspectRatio = static_cast<float>(mRenderer->GetRenderWidth()) / static_cast<float>(mRenderer->GetRenderHeight());
+	mMainCamera = new PerspectiveCamera(45.0f, aspectRatio, 1.0f, 100.0f);
 	mMainCamera->SetPosition(glm::vec3(0.0f, 0.0f, 5.0f));
 
-	mRenderer.SetCurrentCamera(mMainCamera);
+	mRenderer->SetCurrentCamera(mMainCamera);
 }
 
 void NAEEngine::Run()
@@ -52,12 +95,13 @@ void NAEEngine::Run()
 		if (msg.message == WM_QUIT || msg.message == WM_CLOSE)
 		{
 			done = true;
-			mRenderer.WaitForDevice();
+			mRenderer->WaitForDevice();
 		}
 		else
 		{
-			mClock.UpdateTime();
-			mRenderer.Draw();
+			mClock.Update();
+			mInputManager->Update(mClock);
+			mRenderer->Draw();
 		}
 	}
 }
@@ -82,7 +126,7 @@ LRESULT NAEEngine::HandleMessage(HWND hwnd, UINT message, WPARAM wparam, LPARAM 
 			uint32_t height = static_cast<uint32_t>(HIWORD(lparam));
 
 			// TODO: Handle the minimize case by blocking a thread until a new resize message comes through
-			mRenderer.HandleWindowResize(width, height);
+			mRenderer->HandleWindowResize(width, height);
 			return 0;
 		}
 
@@ -127,4 +171,21 @@ LRESULT NAEEngine::WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam
 		}
 		}
 	}
+}
+
+void NAEEngine::CreateInstance()
+{
+	if (sInstance == nullptr)
+	{
+		sInstance = new NAEEngine();
+	}
+}
+
+HWND NAEEngine::MainWindowHandle()
+{ 
+	return mRenderer->MainWindowHandle(); 
+}
+HINSTANCE NAEEngine::MainWindowInstance()
+{ 
+	return mRenderer->MainWindowInstance(); 
 }

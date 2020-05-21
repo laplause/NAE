@@ -9,6 +9,7 @@ namespace NAE
 {
 	class PerspectiveCamera : public Camera
 	{
+		TYPE_DECLARATIONS(PerspectiveCamera, Camera);
 	public:
 		PerspectiveCamera();
 		PerspectiveCamera(float fieldOfView, float aspectRatio, float nearPlaneDistance, float farPlaneDistance);
@@ -17,6 +18,9 @@ namespace NAE
 		virtual void Update(const GameClock& gameClock);
 
 		void SetCameraParameters(float fieldOfView, float aspectRatio, float nearPlaneDistance, float farPlaneDistance);
+
+		void MoveForward();
+		void MoveBack();
 
 		static constexpr float sDefaultFieldOfView = glm::radians(45.0f);
 		static constexpr float sDefaultNearPlaneDistance = 0.1f;

@@ -28,9 +28,9 @@ WindowsInputManager::~WindowsInputManager()
 
 }
 
-void WindowsInputManager::Update(const GameClock& clock)
+void WindowsInputManager::Update()
 {
-	InputManager::Update(clock);
+	InputManager::Update();
 
 	for (auto it = mActionToKeyMappings.begin(); it != mActionToKeyMappings.end(); ++it)
 	{

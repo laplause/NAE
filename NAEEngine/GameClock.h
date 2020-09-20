@@ -1,15 +1,15 @@
 #ifndef GAMECLOCK_H
 #define GAMECLOCK_H
 
-#include "Type.h"
+#include "NAEObject.h"
 
 #include <windows.h>
 
 namespace NAE
 {
-	class GameClock : public Type
+	class GameClock : public NAEObject
 	{
-		TYPE_DECLARATIONS(GameClock, Type);
+		TYPE_DECLARATIONS(GameClock, NAEObject);
 	public:
 		GameClock();
 		virtual ~GameClock();

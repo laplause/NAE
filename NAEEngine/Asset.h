@@ -1,20 +1,24 @@
 #ifndef ASSET_H
 #define ASSET_H
 
-#include <string>
+#include "NAEObject.h"
 
 namespace NAE
 {
-	class Asset
+	class Asset : public NAEObject
 	{
+		TYPE_DECLARATIONS(Asset, NAEObject);
 	public:
 		Asset();
+		Asset(const std::string& name, const std::string& resourcePath);
+		explicit Asset(const std::string& name);
 		virtual ~Asset();
 
-		inline const bool Loaded() const { return mLoaded; };
-		inline const std::string& Name() { return mName; };
+		virtual void Load() = 0;
+		virtual void Unload() = 0;
 
-		inline void SetName(const std::string& name) { mName = name; };
+		inline const bool Loaded() const { return mLoaded; };
+
 		inline void SetResourcePath(const std::string& resourcePath) { mResourcePath = resourcePath; };
 
 	protected:
@@ -22,7 +26,6 @@ namespace NAE
 
 	private:
 		std::string mResourcePath;
-		std::string mName;
 	};
 }
 #endif

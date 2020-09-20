@@ -13,8 +13,7 @@ NAEEngine* NAEEngine::sInstance = nullptr;
 NAEEngine::NAEEngine() :
 	mRenderer(nullptr),
 	mMainCamera(nullptr),
-	mClock(),
-	mSystems()
+	mClock()
 {
 
 }
@@ -38,6 +37,10 @@ NAEEngine::~NAEEngine()
 		delete mRenderer;
 		mRenderer = nullptr;
 	}
+
+	mEntities.clear();
+	mEntityTransforms.clear();
+	mEntityToTransformMap.clear();
 }
 
 void NAEEngine::Initialize(const std::string& appName)
@@ -66,7 +69,6 @@ void NAEEngine::Init(DisplaySettings& ds)
 	if (mInputManager == nullptr)
 	{
 		mInputManager = new WindowsInputManager();
-		mSystems[WindowsInputManager::TypeId()] = mInputManager;
 	}
 
 	// TODO: make sure this is created with the camera type and settings from the loaded game project
@@ -100,10 +102,28 @@ void NAEEngine::Run()
 		else
 		{
 			mClock.Update();
-			mInputManager->Update(mClock);
+			mInputManager->Update();
 			mRenderer->Draw();
 		}
 	}
+}
+
+void NAEEngine::AddDefaultTransform(uint32_t entityId)
+{
+	AddTransform(entityId, glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), 0);
+}
+
+void NAEEngine::AddTransform(uint32_t entityId, const glm::vec3& position, const glm::vec3& rotation, const float& velocity)
+{
+	if (entityId > mEntityTransforms.capacity())
+	{
+		mEntityTransforms.resize(entityId * 2, Transform());
+	}
+
+	Transform& newTransform = mEntityTransforms[entityId];
+	newTransform.SetPosition(position);
+	newTransform.SetRotationFromEulerAngles(rotation);
+	newTransform.SetVelocity(velocity);
 }
 
 LRESULT NAEEngine::HandleMessage(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam)

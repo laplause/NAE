@@ -20,10 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{D21BF87A-B3B6-46B2-8FBA-CC1150C38A35}</ProjectGuid>
-    <RootNamespace>Engine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
-    <ProjectName>NAEEngine</ProjectName>
+    <ProjectGuid>{E496462D-282D-4175-AD55-207D2142C3F1}</ProjectGuid>
+    <RootNamespace>Physics</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -73,6 +72,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)D</TargetName>
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)NAEEngine\;$(SolutionDir)\Common\;$(SolutionDir)External\glm-0.9.9.6\glm</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -80,25 +88,6 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Input\;$(SolutionDir)Common\;$(SolutionDir)Renderer\;$(SolutionDir)External\VulkanSDK\1.1.85.0\Include;$(SolutionDir)External\glm-0.9.9.6\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <PreprocessorDefinitions>OS_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <Link>
-      <AdditionalDependencies>RendererD.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)x64\Debug\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Link>
-    <Lib>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -122,46 +111,18 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Input\;$(SolutionDir)Common\;$(SolutionDir)Renderer\;$(SolutionDir)External\VulkanSDK\1.1.85.0\Include;$(SolutionDir)External\glm-0.9.9.6\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <PreprocessorDefinitions>OS_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)NAEEngine\;$(SolutionDir)\Common\;$(SolutionDir)External\glm-0.9.9.6\glm</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Renderer.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)x64\Release\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Asset.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="UpdateComponent.h" />
-    <ClInclude Include="Component.h" />
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="GameClock.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="NAEEngine.h" />
-    <ClInclude Include="NAEObject.h" />
-    <ClInclude Include="PerspectiveCamera.h" />
-    <ClInclude Include="System.h" />
-    <ClInclude Include="Transform.h" />
-    <ClInclude Include="UpdateManager.h" />
+    <ClInclude Include="PhysicsManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Asset.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="UpdateComponent.cpp" />
-    <ClCompile Include="Component.cpp" />
-    <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="GameClock.cpp" />
-    <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="NAEEngine.cpp" />
-    <ClCompile Include="NAEObject.cpp" />
-    <ClCompile Include="PerspectiveCamera.cpp" />
-    <ClCompile Include="System.cpp" />
-    <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="UpdateManager.cpp" />
+    <ClCompile Include="PhysicsManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

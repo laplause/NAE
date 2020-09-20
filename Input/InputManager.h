@@ -22,7 +22,7 @@ namespace NAE
 		explicit InputManager(const std::string& name);
 		virtual ~InputManager();
 
-		virtual void Update(const GameClock& clock) = 0;
+		virtual void Update() = 0;
 		virtual void AddComponent(uint32_t gameObjectId);
 
 		void AddActionInputMapping(const std::string& inputAction, Keys keyboardKey);

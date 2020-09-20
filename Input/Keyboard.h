@@ -12,7 +12,7 @@ namespace NAE
 		explicit Keyboard(const std::string& name);
 		virtual ~Keyboard();
 
-		virtual void Update(const GameClock& clock) = 0;
+		virtual void Update() = 0;
 		virtual void Init(const InputDeviceInitializer& deviceInitializer) = 0;
 
 		virtual bool IsKeyUp(unsigned char key) const = 0;

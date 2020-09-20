@@ -33,10 +33,10 @@ InputManager::~InputManager()
 	}
 }
 
-void InputManager::Update(const GameClock& clock)
+void InputManager::Update()
 {
-	mKeyboard->Update(clock);
-	mMouse->Update(clock);
+	mKeyboard->Update();
+	mMouse->Update();
 }
 
 void InputManager::AddComponent(uint32_t gameObjectId)

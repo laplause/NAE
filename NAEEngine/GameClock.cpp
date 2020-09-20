@@ -4,6 +4,7 @@ using namespace NAE;
 TYPE_DEFINITIONS(GameClock);
 
 GameClock::GameClock() :
+	NAEObject("GameClock"),
 	mTotalGameTime(0),
 	mDeltaTime(0),
 	mStartTime(),

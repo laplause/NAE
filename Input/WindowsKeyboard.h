@@ -16,7 +16,7 @@ namespace NAE
 		WindowsKeyboard();
 		virtual ~WindowsKeyboard();
 
-		virtual void Update(const GameClock& clock);
+		virtual void Update();
 		virtual void Init(const InputDeviceInitializer& deviceInitializer);
 
 		virtual bool IsKeyUp(unsigned char key) const;

@@ -40,7 +40,7 @@ void WindowsMouse::Init(const InputDeviceInitializer& deviceInitializer)
 	mDirectInputDevice->Acquire();
 }
 
-void WindowsMouse::Update(const GameClock& clock)
+void WindowsMouse::Update()
 {
 	if (mDirectInputDevice != nullptr)
 	{

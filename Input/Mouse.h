@@ -13,7 +13,7 @@ namespace NAE
 		explicit Mouse(const std::string& name);
 		virtual ~Mouse();
 
-		virtual void Update(const GameClock& clock) = 0;
+		virtual void Update() = 0;
 		virtual void Init(const InputDeviceInitializer& deviceInitializer) = 0;
 
 		virtual bool IsButtonUp(MouseButtons button) const = 0;

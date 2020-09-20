@@ -18,7 +18,7 @@ namespace NAE
 		WindowsInputManager();
 		virtual ~WindowsInputManager();
 
-		virtual void Update(const GameClock& clock);
+		virtual void Update();
 
 	private:
 		LPDIRECTINPUT8 mDirectInput;

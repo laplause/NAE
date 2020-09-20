@@ -41,7 +41,7 @@ void WindowsKeyboard::Init(const InputDeviceInitializer& deviceInitializer)
 	mDirectInputDevice->Acquire();
 }
 
-void WindowsKeyboard::Update(const GameClock& clock)
+void WindowsKeyboard::Update()
 {
 	if (mDirectInputDevice != nullptr)
 	{

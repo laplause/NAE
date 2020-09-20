@@ -16,7 +16,7 @@ namespace NAE
 		WindowsMouse();
 		virtual ~WindowsMouse();
 
-		virtual void Update(const GameClock& clock);
+		virtual void Update();
 		virtual void Init(const InputDeviceInitializer& deviceInitializer);
 
 		virtual bool IsButtonUp(MouseButtons button) const;
